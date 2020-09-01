@@ -1,0 +1,5 @@
+﻿{
+  "Data": {
+    "ConnectionString": "server=localhost;user id=root;password=secret;port=3306;database=blog;"
+  }
+}
