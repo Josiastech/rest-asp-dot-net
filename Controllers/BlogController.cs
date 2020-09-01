@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BlogPostApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogPostApi.Controllers
@@ -81,6 +82,6 @@ namespace BlogPostApi.Controllers
             return new OkResult();
         }
 
-        public AppDb Db { get; }
+        private AppDb Db { get; }
     }
 }

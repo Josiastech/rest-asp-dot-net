@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MySqlConnector;
 
-namespace BlogPostApi
+namespace BlogPostApi.Models
 {
     public class BlogPost
     {
@@ -23,7 +23,7 @@ namespace BlogPostApi
 
         public async Task InsertAsync()
         {
-            using var cmd = Db.Connection.CreateCommand();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"INSERT INTO `BlogPost` (`Title`, `Content`) VALUES (@title, @content);";
             BindParams(cmd);
             await cmd.ExecuteNonQueryAsync();
@@ -32,7 +32,7 @@ namespace BlogPostApi
 
         public async Task UpdateAsync()
         {
-            using var cmd = Db.Connection.CreateCommand();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"UPDATE `BlogPost` SET `Title` = @title, `Content` = @content WHERE `Id` = @id;";
             BindParams(cmd);
             BindId(cmd);
@@ -41,7 +41,7 @@ namespace BlogPostApi
 
         public async Task DeleteAsync()
         {
-            using var cmd = Db.Connection.CreateCommand();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"DELETE FROM `BlogPost` WHERE `Id` = @id;";
             BindId(cmd);
             await cmd.ExecuteNonQueryAsync();

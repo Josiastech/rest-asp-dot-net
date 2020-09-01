@@ -4,11 +4,11 @@ using System.Data.Common;
 using System.Threading.Tasks;
 using MySqlConnector;
 
-namespace BlogPostApi
+namespace BlogPostApi.Models
 {
     public class BlogPostQuery
     {
-        public AppDb Db { get; }
+        private AppDb Db { get; }
 
         public BlogPostQuery(AppDb db)
         {
@@ -17,7 +17,7 @@ namespace BlogPostApi
 
         public async Task<BlogPost> FindOneAsync(int id)
         {
-            using var cmd = Db.Connection.CreateCommand();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"SELECT `Id`, `Title`, `Content` FROM `BlogPost` WHERE `Id` = @id";
             cmd.Parameters.Add(new MySqlParameter
             {
@@ -31,15 +31,15 @@ namespace BlogPostApi
 
         public async Task<List<BlogPost>> LatestPostsAsync()
         {
-            using var cmd = Db.Connection.CreateCommand();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"SELECT `Id`, `Title`, `Content` FROM `BlogPost` ORDER BY `Id` DESC LIMIT 10;";
             return await ReadAllAsync(await cmd.ExecuteReaderAsync());
         }
 
         public async Task DeleteAllAsync()
         {
-            using var txn = await Db.Connection.BeginTransactionAsync();
-            using var cmd = Db.Connection.CreateCommand();
+            await using var txn = await Db.Connection.BeginTransactionAsync();
+            await using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"DELETE FROM `BlogPost`";
             await cmd.ExecuteNonQueryAsync();
             await txn.CommitAsync();
@@ -48,7 +48,7 @@ namespace BlogPostApi
         private async Task<List<BlogPost>> ReadAllAsync(DbDataReader reader)
         {
             var posts = new List<BlogPost>();
-            using (reader)
+            await using (reader)
             {
                 while (await reader.ReadAsync())
                 {
