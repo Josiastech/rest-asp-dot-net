@@ -47,3 +47,8 @@ Startup.cs contains runtime configuration and framework services. Add this call 
 services.AddTransient<AppDb>(_ => new AppDb(Configuration["ConnectionStrings:DefaultConnection"]));
 ```
 Now our app is configured and we can focus on writing the core functionality!
+
+### Adding Swagger
+```
+dotnet add package Swashbuckle --version 5.6.0
+```
